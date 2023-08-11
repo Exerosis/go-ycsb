@@ -1,4 +1,4 @@
-module github.com/pingcap/go-ycsb
+module github.com/tigranb2/go-ycsb
 
 require (
 	cloud.google.com/go/spanner v1.41.0
