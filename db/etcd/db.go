@@ -6,7 +6,6 @@ import (
 	"crypto/tls"
 	"encoding/json"
 	"fmt"
-	"log"
 	"strings"
 	"time"
 
@@ -182,10 +181,10 @@ func (db *etcdDB) Transaction(ctx context.Context, table string, key string, val
 		Else(clientv3.OpPut(rkey, "ABC")).
 		Commit()
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 
-	r, nil := db.Read(ctx, table, key, []string{})
+	r, _ := db.Read(ctx, table, key, []string{})
 	fmt.Println(r)
 
 	return nil
