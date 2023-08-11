@@ -15,7 +15,7 @@ import (
 	"github.com/magiconair/properties"
 	"go.etcd.io/etcd/client/pkg/v3/transport"
 
-	"github.com/pingcap/go-ycsb/pkg/ycsb"
+	"github.com/tigranb2/go-ycsb/pkg/ycsb"
 )
 
 // properties

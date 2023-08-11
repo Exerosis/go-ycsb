@@ -11,11 +11,11 @@ go-ycsb is a Go port of [YCSB](https://github.com/brianfrankcooper/YCSB). It ful
 
 ### Download
 
-https://github.com/pingcap/go-ycsb/releases/latest
+https://github.com/tigranb2/go-ycsb/releases/latest
 
 **Linux**
 ```
-wget -c https://github.com/pingcap/go-ycsb/releases/latest/download/go-ycsb-linux-amd64.tar.gz -O - | tar -xz
+wget -c https://github.com/tigranb2/go-ycsb/releases/latest/download/go-ycsb-linux-amd64.tar.gz -O - | tar -xz
 
 # give it a try
 ./go-ycsb --help
@@ -23,7 +23,7 @@ wget -c https://github.com/pingcap/go-ycsb/releases/latest/download/go-ycsb-linu
 
 **OSX**
 ```
-wget -c https://github.com/pingcap/go-ycsb/releases/latest/download/go-ycsb-darwin-amd64.tar.gz -O - | tar -xz
+wget -c https://github.com/tigranb2/go-ycsb/releases/latest/download/go-ycsb-darwin-amd64.tar.gz -O - | tar -xz
 
 # give it a try
 ./go-ycsb --help
@@ -32,7 +32,7 @@ wget -c https://github.com/pingcap/go-ycsb/releases/latest/download/go-ycsb-darw
 ### Building from source
 
 ```bash
-git clone https://github.com/pingcap/go-ycsb.git
+git clone https://github.com/tigranb2/go-ycsb.git
 cd go-ycsb
 make
 

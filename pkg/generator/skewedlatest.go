@@ -34,7 +34,7 @@ import (
 	"math/rand"
 	"time"
 
-	"github.com/pingcap/go-ycsb/pkg/ycsb"
+	"github.com/tigranb2/go-ycsb/pkg/ycsb"
 )
 
 // SkewedLatest generates a popularity distribution of items,

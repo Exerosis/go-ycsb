@@ -21,8 +21,8 @@ import (
 	"time"
 
 	"github.com/magiconair/properties"
-	"github.com/pingcap/go-ycsb/pkg/prop"
-	"github.com/pingcap/go-ycsb/pkg/ycsb"
+	"github.com/tigranb2/go-ycsb/pkg/prop"
+	"github.com/tigranb2/go-ycsb/pkg/ycsb"
 )
 
 var header = []string{"Operation", "Takes(s)", "Count", "OPS", "Avg(us)", "Min(us)", "Max(us)", "50th(us)", "90th(us)", "95th(us)", "99th(us)", "99.9th(us)", "99.99th(us)"}

@@ -9,8 +9,8 @@ import (
 	"time"
 
 	"github.com/magiconair/properties"
-	"github.com/pingcap/go-ycsb/pkg/prop"
-	"github.com/pingcap/go-ycsb/pkg/util"
+	"github.com/tigranb2/go-ycsb/pkg/prop"
+	"github.com/tigranb2/go-ycsb/pkg/util"
 )
 
 type histograms struct {

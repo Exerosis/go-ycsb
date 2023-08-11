@@ -34,7 +34,7 @@ import (
 	"math/rand"
 	"sync/atomic"
 
-	"github.com/pingcap/go-ycsb/pkg/util"
+	"github.com/tigranb2/go-ycsb/pkg/util"
 )
 
 const (

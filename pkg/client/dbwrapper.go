@@ -18,8 +18,8 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/pingcap/go-ycsb/pkg/measurement"
-	"github.com/pingcap/go-ycsb/pkg/ycsb"
+	"github.com/tigranb2/go-ycsb/pkg/measurement"
+	"github.com/tigranb2/go-ycsb/pkg/ycsb"
 )
 
 // DbWrapper stores the pointer to a implementation of ycsb.DB.
