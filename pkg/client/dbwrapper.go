@@ -122,6 +122,15 @@ func (db DbWrapper) Insert(ctx context.Context, table string, key string, values
 	return db.DB.Insert(ctx, table, key, values)
 }
 
+func (db DbWrapper) Transaction(ctx context.Context, table string, key string, values map[string][]byte) error {
+	//start := time.Now()
+	//defer func() {
+	//	measure(start, "TRANSACTION", err)
+	//}()
+
+	return db.DB.Transaction(ctx, table, key, values)
+}
+
 func (db DbWrapper) BatchInsert(ctx context.Context, table string, keys []string, values []map[string][]byte) (err error) {
 	batchDB, ok := db.DB.(ycsb.BatchDB)
 	if ok {
