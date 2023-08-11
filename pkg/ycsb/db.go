@@ -68,6 +68,12 @@ type DB interface {
 	// table: The name of the table.
 	// key: The record key of the record to delete.
 	Delete(ctx context.Context, table string, key string) error
+
+	// Transaction test
+	// table: The name of the table.
+	// key: The record key of the record to insert.
+	// values: A map of field/value pairs to insert in the record.
+	Transaction(ctx context.Context, table string, key string, values map[string][]byte) error
 }
 
 type BatchDB interface {

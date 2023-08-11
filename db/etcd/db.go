@@ -6,6 +6,7 @@ import (
 	"crypto/tls"
 	"encoding/json"
 	"fmt"
+	"log"
 	"strings"
 	"time"
 
@@ -106,9 +107,10 @@ func (db *etcdDB) Read(ctx context.Context, table string, key string, _ []string
 		return nil, err
 	}
 
-	if value.Count == 0 {
-		return nil, fmt.Errorf("could not find value for key [%s]", rkey)
-	}
+	// TODO: revisit count
+	//if value.Count == 0 {
+	//	return nil, fmt.Errorf("could not find value for key [%s]", rkey)
+	//}
 
 	var r map[string][]byte
 	err = json.NewDecoder(bytes.NewReader(value.Kvs[0].Value)).Decode(&r)
@@ -130,9 +132,10 @@ func (db *etcdDB) Scan(ctx context.Context, table string, startKey string, count
 		return nil, err
 	}
 
-	if values.Count != int64(count) {
-		return nil, fmt.Errorf("unexpected number of result for key [%s], expected %d but was %d", rkey, count, values.Count)
-	}
+	// TODO: revisit count
+	//if values.Count != int64(count) {
+	//	return nil, fmt.Errorf("unexpected number of result for key [%s], expected %d but was %d", rkey, count, values.Count)
+	//}
 
 	for _, v := range values.Kvs {
 		var r map[string][]byte
@@ -161,6 +164,31 @@ func (db *etcdDB) Update(ctx context.Context, table string, key string, values m
 
 func (db *etcdDB) Insert(ctx context.Context, table string, key string, values map[string][]byte) error {
 	return db.Update(ctx, table, key, values)
+}
+
+func (db *etcdDB) Transaction(ctx context.Context, table string, key string, values map[string][]byte) error {
+	err := db.Insert(ctx, table, key, values)
+	if err != nil {
+		return err
+	}
+
+	rkey := getRowKey(table, key)
+	_, err = db.client.Txn(ctx).
+		// txn value comparisons are lexical
+		If(clientv3.Compare(clientv3.Value(rkey), ">", "abc")).
+		// the "Then" runs, since "xyz" > "abc"
+		Then(clientv3.OpPut(rkey, "XYZ")).
+		// the "Else" does not run
+		Else(clientv3.OpPut(rkey, "ABC")).
+		Commit()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	r, nil := db.Read(ctx, table, key, []string{})
+	fmt.Println(r)
+
+	return nil
 }
 
 func (db *etcdDB) Delete(ctx context.Context, table string, key string) error {

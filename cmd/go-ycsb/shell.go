@@ -107,6 +107,13 @@ func runShellCommand(args []string) {
 			Run:                   runShellTableCommand,
 			DisableFlagsInUseLine: true,
 		},
+		&cobra.Command{
+			Use:                   "txn key field0=value0 [field1=value1 ...]",
+			Short:                 "Test transaction",
+			Args:                  cobra.MinimumNArgs(2),
+			Run:                   runShellTransactionCommand,
+			DisableFlagsInUseLine: true,
+		},
 	)
 
 	if err := cmd.Execute(); err != nil {
@@ -213,6 +220,23 @@ func runShellTableCommand(cmd *cobra.Command, args []string) {
 		tableName = args[0]
 	}
 	fmt.Printf("Using table %s\n", tableName)
+}
+
+func runShellTransactionCommand(cmd *cobra.Command, args []string) {
+	key := args[0]
+	values := make(map[string][]byte, len(args[1:]))
+
+	for _, arg := range args[1:] {
+		sep := strings.SplitN(arg, "=", 2)
+		values[sep[0]] = []byte(sep[1])
+	}
+
+	if err := globalDB.Transaction(shellContext, tableName, key, values); err != nil {
+		fmt.Printf("Transaction %s failed %v\n", key, err)
+		return
+	}
+
+	fmt.Printf("Transaction %s ok\n", key)
 }
 
 func shellLoop() {
