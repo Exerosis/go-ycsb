@@ -84,6 +84,10 @@ readmodifywriteproportion=0
 # What proportion of operations are scans
 scanproportion=0
 
+# What proportion of operations are transactions
+transactionproportion=0
+
+
 # On a single scan, the maximum number of records to access
 maxscanlength=1000
 

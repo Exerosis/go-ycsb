@@ -66,6 +66,8 @@ const (
 	ScanProportionDefault            = float64(0.0)
 	ReadModifyWriteProportion        = "readmodifywriteproportion"
 	ReadModifyWriteProportionDefault = float64(0.0)
+	TransactionProportion            = "transactionproportion"
+	TransactionProportionDefault     = float64(0.0)
 	// "uniform", "zipfian", "latest"
 	RequestDistribution        = "requestdistribution"
 	RequestDistributionDefault = "uniform"

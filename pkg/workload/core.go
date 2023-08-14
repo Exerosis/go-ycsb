@@ -50,6 +50,7 @@ const (
 	insert
 	scan
 	readModifyWrite
+	transaction
 )
 
 // Core is the core benchmark scenario. Represents a set of clients doing simple CRUD operations.
@@ -108,6 +109,7 @@ func createOperationGenerator(p *properties.Properties) *generator.Discrete {
 	insertProportion := p.GetFloat64(prop.InsertProportion, prop.InsertProportionDefault)
 	scanProportion := p.GetFloat64(prop.ScanProportion, prop.ScanProportionDefault)
 	readModifyWriteProportion := p.GetFloat64(prop.ReadModifyWriteProportion, prop.ReadModifyWriteProportionDefault)
+	transactionProportion := p.GetFloat64(prop.TransactionProportion, prop.TransactionProportionDefault)
 
 	operationChooser := generator.NewDiscrete()
 	if readProportion > 0 {
@@ -128,6 +130,10 @@ func createOperationGenerator(p *properties.Properties) *generator.Discrete {
 
 	if readModifyWriteProportion > 0 {
 		operationChooser.Add(readModifyWriteProportion, int64(readModifyWrite))
+	}
+
+	if transactionProportion > 0 {
+		operationChooser.Add(transactionProportion, int64(transaction))
 	}
 
 	return operationChooser
@@ -370,8 +376,10 @@ func (c *core) DoTransaction(ctx context.Context, db ycsb.DB) error {
 		return c.doTransactionInsert(ctx, db, state)
 	case scan:
 		return c.doTransactionScan(ctx, db, state)
-	default:
+	case readModifyWrite:
 		return c.doTransactionReadModifyWrite(ctx, db, state)
+	default:
+		return c.doTransactionTxn(ctx, db, state)
 	}
 }
 
@@ -525,6 +533,17 @@ func (c *core) doTransactionUpdate(ctx context.Context, db ycsb.DB, state *coreS
 	defer c.putValues(values)
 
 	return db.Update(ctx, c.table, keyName, values)
+}
+
+func (c *core) doTransactionTxn(ctx context.Context, db ycsb.DB, state *coreState) error {
+	r := state.r
+	keyNum := c.transactionInsertKeySequence.Next(r)
+	defer c.transactionInsertKeySequence.Acknowledge(keyNum)
+	dbKey := c.buildKeyName(keyNum)
+	values := c.buildValues(state, dbKey)
+	defer c.putValues(values)
+
+	return db.Transaction(ctx, c.table, dbKey, values)
 }
 
 func (c *core) doBatchTransactionRead(ctx context.Context, batchSize int, db ycsb.BatchDB, state *coreState) error {
