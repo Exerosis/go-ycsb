@@ -33,5 +33,8 @@ readmodifywriteproportion=0.01
 scanproportion=0
 insertproportion=0
 
+# The number of thread.
+threadcount=750
+
 requestdistribution=zipfian
 
