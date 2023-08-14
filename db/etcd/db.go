@@ -166,13 +166,8 @@ func (db *etcdDB) Insert(ctx context.Context, table string, key string, values m
 }
 
 func (db *etcdDB) Transaction(ctx context.Context, table string, key string, values map[string][]byte) error {
-	err := db.Insert(ctx, table, key, values)
-	if err != nil {
-		return err
-	}
-
 	rkey := getRowKey(table, key)
-	_, err = db.client.Txn(ctx).
+	_, err := db.client.Txn(ctx).
 		// txn value comparisons are lexical
 		If(clientv3.Compare(clientv3.Value(rkey), ">", "abc")).
 		// the "Then" runs, since "xyz" > "abc"
@@ -183,9 +178,6 @@ func (db *etcdDB) Transaction(ctx context.Context, table string, key string, val
 	if err != nil {
 		return err
 	}
-
-	r, _ := db.Read(ctx, table, key, []string{})
-	fmt.Println(r)
 
 	return nil
 }

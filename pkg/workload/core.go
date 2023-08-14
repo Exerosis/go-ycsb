@@ -536,9 +536,8 @@ func (c *core) doTransactionUpdate(ctx context.Context, db ycsb.DB, state *coreS
 }
 
 func (c *core) doTransactionTxn(ctx context.Context, db ycsb.DB, state *coreState) error {
-	r := state.r
-	keyNum := c.transactionInsertKeySequence.Next(r)
-	defer c.transactionInsertKeySequence.Acknowledge(keyNum)
+	keyNum := c.nextKeyNum(state)
+	//defer c.transactionInsertKeySequence.Acknowledge(keyNum)
 	dbKey := c.buildKeyName(keyNum)
 	values := c.buildValues(state, dbKey)
 	defer c.putValues(values)
