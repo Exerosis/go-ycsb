@@ -112,7 +112,13 @@ func (db *etcdDB) Read(ctx context.Context, table string, key string, _ []string
 	//}
 
 	var r map[string][]byte
-	err = json.NewDecoder(bytes.NewReader(value.Kvs[0].Value)).Decode(&r)
+	var bytes []byte
+	if len(value.Kvs) <= 0 {
+		bytes = make([]byte, 0) 
+	} else {
+		bytes = value.Kvs[0].Value
+	}
+	err = json.NewDecoder(bytes.NewReader()).Decode(&r)
 	if err != nil {
 		return nil, err
 	}
