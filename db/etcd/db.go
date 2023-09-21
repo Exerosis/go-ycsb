@@ -118,7 +118,7 @@ func (db *etcdDB) Read(ctx context.Context, table string, key string, _ []string
 	} else {
 		bytes = value.Kvs[0].Value
 	}
-	err = json.NewDecoder(bytes.NewReader()).Decode(&r)
+	err = json.NewDecoder(bytes.NewReader(bytes)).Decode(&r)
 	if err != nil {
 		return nil, err
 	}
