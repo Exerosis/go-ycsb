@@ -114,12 +114,13 @@ func (db *etcdDB) Read(ctx context.Context, table string, key string, _ []string
 	var r map[string][]byte
 	var bytesss []byte
 	if len(value.Kvs) <= 0 {
-		bytesss = make([]byte, 0) 
+		bytesss = make([]byte, 0)
 	} else {
 		bytesss = value.Kvs[0].Value
 	}
 	err = json.NewDecoder(bytes.NewReader(bytesss)).Decode(&r)
 	if err != nil {
+		println("Error creating decoder!")
 		return nil, err
 	}
 	return r, nil
