@@ -298,7 +298,7 @@ func (c *core) DoInsert(ctx context.Context, db ycsb.DB) error {
 			break
 		}
 
-		// Sleep for a random time betweensz [0.8, 1.2)*insertionRetryInterval
+		// Sleep for a random time between [0.8, 1.2)*insertionRetryInterval
 		sleepTimeMs := float64((c.insertionRetryInterval * 1000)) * (0.8 + 0.4*r.Float64())
 
 		time.Sleep(time.Duration(sleepTimeMs) * time.Millisecond)
@@ -353,7 +353,7 @@ func (c *core) DoBatchInsert(ctx context.Context, batchSize int, db ycsb.DB) err
 			break
 		}
 
-		// Sleep for a random time betweensz [0.8, 1.2)*insertionRetryInterval
+		// Sleep for a random time between [0.8, 1.2)*insertionRetryInterval
 		sleepTimeMs := float64((c.insertionRetryInterval * 1000)) * (0.8 + 0.4*r.Float64())
 
 		time.Sleep(time.Duration(sleepTimeMs) * time.Millisecond)
@@ -680,6 +680,12 @@ func (coreCreator) Create(p *properties.Properties) (ycsb.Workload, error) {
 		expectedNewKeys := int64(float64(opCount) * insertProportion * 2.0)
 		keyrangeUpperBound = insertStart + insertCount + expectedNewKeys
 		c.keyChooser = generator.NewScrambledZipfian(keyrangeLowerBound, keyrangeUpperBound, generator.ZipfianConstant)
+	case "zipflight":
+		insertProportion := p.GetFloat64(prop.InsertProportion, prop.InsertProportionDefault)
+		opCount := p.GetInt64(prop.OperationCount, 0)
+		expectedNewKeys := int64(float64(opCount) * insertProportion * 2.0)
+		keyrangeUpperBound = insertStart + insertCount + expectedNewKeys
+		c.keyChooser = generator.NewScrambledZipfian(keyrangeLowerBound, keyrangeUpperBound, .6)
 	case "latest":
 		c.keyChooser = generator.NewSkewedLatest(c.transactionInsertKeySequence)
 	case "hotspot":
